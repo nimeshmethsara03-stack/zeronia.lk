@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeronia Admin Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f5f8;color:#10264a}
+header{background:#082650;color:white;padding:22px}
+header h1{margin:0;color:#edbd45}
+header p{margin:7px 0 0}
+main{max-width:1000px;margin:25px auto;padding:0 15px}
+.panel{background:white;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 3px 15px #0000000b}
+h2{margin-top:0}
+input,select,textarea{width:100%;padding:12px;margin:7px 0 14px;border:1px solid #ccd2dc;border-radius:7px;font-size:15px}
+label{font-weight:bold;font-size:14px}
+button{border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:bold}
+.save{background:#082650;color:white;width:100%}
+.delete{background:#ffe5e5;color:#a00}
+.edit{background:#f5d16b;color:#10264a}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{border:1px solid #ddd;border-radius:10px;padding:12px;overflow:hidden}
+.card img{width:100%;height:160px;object-fit:cover;border-radius:7px}
+.status{font-size:13px;font-weight:bold;color:#168447}
+.out{color:#bd3030}
+.actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+#message{font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h1>ZERONIA</h1>
+<p>Gift & Accessories — Admin Dashboard</p>
+</header>
+
+<main>
+<section class="panel">
+<h2 id="formTitle">Add New Product</h2>
+<form id="productForm">
+<input type="hidden" id="productId">
+
+<label>Product Name</label>
+<input id="name" required placeholder="e.g. Teddy Bear">
+
+<label>Category</label>
+<select id="category">
+<option>Gift Items</option>
+<option>Bouquets</option>
+<option>Home Decor</option>
+</select>
+
+<label>Product Description</label>
+<textarea id="description" rows="4" placeholder="Enter product details, features and benefits"></textarea>
+
+<label>Price (LKR)</label>
+<input id="price" type="number" min="0" step="1" required placeholder="2500">
+
+<label>Product Photo</label>
+<input id="photo" type="file" accept="image/*">
+<small>Select a photo from your computer. For this first test, keep images small.</small>
+
+<label>Stock Status</label>
+<select id="status">
+<option value="Available">Available</option>
+<option value="Out of Stock">Out of Stock</option>
+</select>
+
+<div class="actions">
+<button class="save" type="submit" id="saveButton">Save Product</button>
+<button type="button" id="cancelButton" hidden>Cancel Edit</button>
+</div>
+<p id="message"></p>
+</form>
+</section>
+
+<section class="panel">
+<h2>Manage Products</h2>
+<p id="count">Products: 0</p>
+<div class="products" id="products"></div>
+</section>
+</main>
+
+<script>
+const KEY = "zeronia_products_v1";
+let items = [];
+let selectedPhoto = "";
+const $ = id => document.getElementById(id);
+
+try {
+  items = JSON.parse(localStorage.getItem(KEY) || "[]");
+  if (!Array.isArray(items)) items = [];
+} catch {
+  items = [];
+}
+
+$("photo").addEventListener("change", function() {
+  const file = this.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image.");
+    this.value = "";
+    return;
+  }
+  if (file.size > 1500000) {
+    alert("Please choose an image under 1.5 MB.");
+    this.value = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => { selectedPhoto = reader.result; };
+  reader.readAsDataURL(file);
+});
+
+function saveItems() {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(items));
+    render();
+    return true;
+  } catch (e) {
+    alert("Storage is full. Please use smaller photos.");
+    return false;
+  }
+}
+
+function resetForm() {
+  $("productForm").reset();
+  $("productId").value = "";
+  selectedPhoto = "";
+  $("formTitle").textContent = "Add New Product";
+  $("saveButton").textContent = "Save Product";
+  $("cancelButton").hidden = true;
+  $("message").textContent = "";
+}
+
+$("productForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const id = $("productId").value;
+  const old = items.find(p => p.id === id);
+
+  const product = {
+    id: id || String(Date.now()),
+    name: $("name").value.trim(),
+    description: $("description").value.trim(),
+    category: $("category").value,
+    price: Number($("price").value),
+    status: $("status").value,
+    photo: selectedPhoto || (old ? (old.photo || old.image || "") : ""),
+image: selectedPhoto || (old ? (old.image || old.photo || "") : "")
+  };
+
+  if (!product.name || product.price < 0) {
+    alert("Please check the product name and price.");
+    return;
+  }
+
+  if (id) {
+    items = items.map(p => p.id === id ? product : p);
+  } else {
+    items.push(product);
+  }
+
+  if (saveItems()) {
+    resetForm();
+    $("message").textContent = "Product saved successfully.";
+  }
+});
+
+function editProduct(id) {
+  const p = items.find(item => item.id === id);
+  if (!p) return;
+  $("productId").value = p.id;
+  $("name").value = p.name;
+  $("description").value = p.description || "";
+  $("category").value = p.category;
+  $("price").value = p.price;
+  $("status").value = p.status;
+  selectedPhoto = p.photo || p.image || "";
+  $("formTitle").textContent = "Edit Product";
+  $("saveButton").textContent = "Update Product";
+  $("cancelButton").hidden = false;
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+
+function deleteProduct(id) {
+  const p = items.find(item => item.id === id);
+  if (!p || !confirm("Delete " + p.name + "?")) return;
+  items = items.filter(item => item.id !== id);
+  saveItems();
+}
+
+$("cancelButton").addEventListener("click", resetForm);
+
+function render() {
+  $("count").textContent = "Products: " + items.length;
+  $("products").replaceChildren();
+
+  items.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    if (p.photo) {
+      const img = document.createElement("img");
+      img.src = p.photo;
+      img.alt = p.name;
+      card.appendChild(img);
+    }
+
+    const title = document.createElement("h3");
+    title.textContent = p.name;
+    card.appendChild(title);
+
+    const category = document.createElement("p");
+    category.textContent = p.category;
+    card.appendChild(category);
+
+    const price = document.createElement("p");
+    price.textContent = "Rs. " + p.price.toLocaleString("en-US");
+    card.appendChild(price);
+
+    const status = document.createElement("p");
+    status.className = p.status === "Available" ? "status" : "status out";
+    status.textContent = p.status;
+    card.appendChild(status);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const edit = document.createElement("button");
+    edit.className = "edit";
+    edit.textContent = "Edit";
+    edit.addEventListener("click", () => editProduct(p.id));
+
+    const del = document.createElement("button");
+    del.className = "delete";
+    del.textContent = "Delete";
+    del.addEventListener("click", () => deleteProduct(p.id));
+
+    actions.append(edit, del);
+    card.appendChild(actions);
+    $("products").appendChild(card);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
