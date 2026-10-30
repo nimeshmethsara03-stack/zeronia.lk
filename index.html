@@ -4,22 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zeronia Gift & Accessories</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#06152e;color:#fdfeff}
-.top{background:#011635;color:white;padding:12px 5%;display:flex;justify-content:space-between;font-size:13px;gap:12px;flex-wrap:wrap}
-header{padding:20px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.logo{font-family:Georgia,serif;font-size:clamp(30px,4vw,46px);font-style:italic;font-weight:bold;color:#082650}
-.logo span{display:block;font:14px Arial;color:#c69a31;text-align:center}
-.logo {
+:root {
+  --navy: #061a35;
+  --navy-dark: #011635;
+  --gold: #efbd42;
+  --gold-dark: #c69a31;
+  --cream: #fffdf9;
+  --text: #092650;
+  --border: #e6e6e6;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+}
+.top {
+  background: var(--navy-dark);
+  color: white;
+  padding: 12px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+header {
+  padding: 16px 5%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: white;
 }
-
-.logo-link {
-  display: inline-block;
-}
-
+.logo { display: flex; align-items: center; }
+.logo-link { display: inline-block; }
 .logo img {
   display: block;
   width: 200px;
@@ -27,310 +52,395 @@ header{padding:20px 5%;display:flex;align-items:center;justify-content:space-bet
   height: auto;
   object-fit: contain;
 }
-
-@media (max-width: 600px) {
-  .logo img {
-    width: 150px;
-  }
-}
-.search{padding:13px 18px;border:1px solid #ddd;border-radius:30px;flex:1;max-width:450px;min-width:180px}
-.search-box{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: nowrap;
-}
-
 .search {
+  padding: 13px 18px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
   flex: 1;
-  min-width: 0;
-  max-width: none;
+  max-width: 450px;
+  min-width: 180px;
+  font-size: 14px;
 }
-
-.search-button {
-  flex-shrink: 0;
-  margin-left: 0;
+.cart-summary {
+  border: 0;
+  background: var(--navy);
+  color: white;
+  border-radius: 25px;
+  padding: 11px 16px;
+  font-size: 16px;
 }
-
-.search-btn{
-  padding:13px 18px;
-  background:#f9f6f6;
-  color:#06152e;
-  border:0;
-  border-radius:30px;
-  font-weight:bold;
-  cursor:pointer;
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 15px;
+  flex-wrap: wrap;
+  border-top: 1px solid #eee;
+  background: white;
 }
-
-.search-btn:hover{
-  background:#ffffff;
+nav a {
+  color: #041c3e;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
 }
+nav a:hover { color: var(--gold-dark); }
 
-@media(max-width:700px){
-  .search-box{
-    order:3;
-    flex-basis:100%;
-    max-width:none;
-  }
-}
-nav{display:flex;justify-content:center;gap:30px;padding:15px;flex-wrap:wrap;border-top:1px solid #eee}
-nav a{color:#fafafa;text-decoration:none;font-size:14px}
-.hero{min-height:370px;display:flex;align-items:center;padding:45px 7%;background:linear-gradient(90deg,#061d40 0%,#102d53 43%,#33302b 100%);color:white;position:relative;overflow:hidden}
-.hero-text{max-width:490px;position:relative;z-index:1}
-.hero small{color:#f1c34c;letter-spacing:2px}
-.hero h1{font:italic bold clamp(48px,7vw,78px) Georgia,serif;margin:20px 0 5px}
-.hero h2{color:#f1c34c;margin-top:0}
-.hero p{line-height:1.7}
-.btn{display:inline-block;background:#efbd42;color:#06234a;padding:14px 28px;border:0;border-radius:30px;font-weight:bold;text-decoration:none;cursor:pointer}
-.hero-image{position:absolute;right:0;top:0;width:55%;height:100%;object-fit:cover;opacity:.65}
-.section{padding:38px 5%}
-.heading{text-align:center;font-size:25px;letter-spacing:2px;margin:0 0 28px}
-
-/* ZERONIA COVER PHOTO */
 .zeronia-hero {
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #061a35;
+  background: var(--navy);
   line-height: 0;
 }
-
 .zeronia-cover-image {
   display: block;
   width: 100%;
   height: auto;
+  max-height: 620px;
   object-fit: cover;
+  object-position: center;
 }
-
 .zeronia-shop-button {
   position: absolute;
-  left: 7%;
-  bottom: 18%;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
   display: inline-block;
-  background: #f1c34c;
-  color: #0a0a0a;
+  background: var(--gold);
+  color: #071b35;
   padding: 13px 28px;
+  border: 2px solid var(--gold);
   border-radius: 30px;
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
   line-height: normal;
+  box-shadow: 0 3px 12px #0003;
   transition: 0.2s ease;
 }
-
 .zeronia-shop-button:hover {
-  background: #ffffff;
-  transform: translateY(-2px);
+  background: white;
+  border-color: white;
+  transform: translateX(-50%) translateY(-2px);
 }
+.section { padding: 38px 5%; }
+.heading {
+  text-align: center;
+  font-size: 25px;
+  letter-spacing: 2px;
+  margin: 0 0 28px;
+}
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.category {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px #0001;
+  background: white;
+  text-decoration: none;
+}
+.category img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+.category div {
+  background: #082650;
+  color: white;
+  padding: 17px;
+  text-align: center;
+  font-size: 19px;
+  font-weight: bold;
+}
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+.product {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  background: white;
+  box-shadow: 0 3px 8px #0000000b;
+  min-width: 0;
+}
+.product img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.product h3 { font-size: 15px; }
+.description { font-size: 13px; color: #555; }
+.price { font-weight: bold; }
+.cart {
+  width: 100%;
+  padding: 12px;
+  background: #082650;
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.cart:hover { background: #123b70; }
+.cart:disabled { background: #999; cursor: not-allowed; }
+.cart-box {
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 18px;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  background: white;
+}
+.cart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+.remove-item {
+  border: 0;
+  border-radius: 5px;
+  padding: 5px 9px;
+  background: #f3e6c6;
+  color: #092650;
+  cursor: pointer;
+}
+#total { text-align: right; font-weight: bold; }
+.order-form {
+  max-width: 600px;
+  margin: 24px auto 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: white;
+}
+.order-form label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 12px;
+}
+.order-form input,
+.order-form textarea {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font: inherit;
+}
+.services {
+  background: #f8f4eb;
+  display: flex;
+  justify-content: space-around;
+  gap: 18px;
+  padding: 25px 5%;
+  text-align: center;
+  flex-wrap: wrap;
+}
+footer {
+  background: #061e42;
+  color: white;
+  padding: 35px 5%;
+  text-align: center;
+}
+footer strong { color: var(--gold); }
 
-@media (max-width: 600px) {
-  .zeronia-shop-button {
-    left: 5%;
-    bottom: 8%;
-    padding: 8px 14px;
-    font-size: 11px;
-  }
+@media (max-width: 900px) {
+  .products { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .zeronia-cover-image { max-height: none; }
 }
-
-@media(max-width:700px){
- .hero{min-height:350px}
- .hero-image{width:100%;opacity:.22}
- .categories{grid-template-columns:1fr}
- .category img{height:220px}
- .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .product img{height:145px}
- nav{gap:16px}
- header{gap:12px}
- .search{order:3;max-width:none;flex-basis:100%}
- .section{padding:28px 4%}
+@media (max-width: 700px) {
+  .logo img { width: 150px; }
+  header { gap: 12px; }
+  .search { order: 3; max-width: none; flex-basis: 100%; }
+  nav { gap: 16px; }
+  .section { padding: 28px 4%; }
+  .categories { grid-template-columns: 1fr; }
+  .category img { height: 220px; }
+  .products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .product img { height: 145px; }
+  .heading { font-size: 21px; }
+  .zeronia-shop-button { bottom: 5%; padding: 8px 14px; font-size: 11px; }
 }
-.categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.category{border-radius:12px;overflow:hidden;box-shadow:0 3px 12px #0001;background:white}
-.category img{width:100%;height:190px;object-fit:cover;display:block}
-.category div{background:#082650;color:white;padding:17px;text-align:center;font-size:19px;font-weight:bold}
-.products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.product{border:1px solid #e6e6e6;border-radius:10px;padding:10px;background:white;box-shadow:0 3px 8px #0000000b}
-.product img{width:100%;height:180px;object-fit:cover;border-radius:6px}
-.product h3{
-  font-size:15px;
-  color:#06152e;
+@media (max-width: 380px) {
+  .products { grid-template-columns: 1fr; }
+  .top { justify-content: center; }
 }
-
-.product .price{
-  font-weight:bold;
-  color:#000000;
-}
-
-.product p{
-  color:#333333;
-}
-.cart{width:100%;padding:12px;background:#082650;color:white;border:0;border-radius:6px;cursor:pointer}
-.services{
-  background:#06152e;
-  color:#f6f5f3;
-  display:flex;
-  justify-content:space-around;
-  gap:18px;
-  padding:25px 5%;
-  text-align:center;
-  flex-wrap:wrap;
-}
-
-
-footer{background:#f5f2f2;color:rgb(0, 0, 0);padding:35px 5%;text-align:center}
-footer strong{color:#efbd42}
 </style>
 </head>
-<body>
 
+<body>
 <div class="top">
-  <div class="top-track">
-    <div class="top-group">
-  
-      <span>🎁 Special Gifts • Beautiful Moments</span>
-    </div>
+  <span>📍 Nawalapitiya</span>
+  <span>🚚 Islandwide Delivery</span>
+  <span>🎁 Special Gifts • Beautiful Moments</span>
+</div>
 
 <header>
- 
+  <div class="logo">
+    <a href="index.html" class="logo-link" aria-label="Zeronia home">
+      <img src="images/zeronia-logo.png" alt="ZERONIA Gift & Accessories Logo">
+    </a>
+  </div>
 
+  <input class="search" id="search" type="search"
+         placeholder="Search for gifts, bouquets, home decor..."
+         aria-label="Search products">
 
- <input class="search" id="search" placeholder="Search for gifts, bouquets, home decor...">
-<button type="button" class="search-btn" onclick="searchProducts()">
-    🔍 Search
+  <button class="cart-summary" type="button"
+          onclick="document.getElementById('cart-items').scrollIntoView({behavior:'smooth'})"
+          aria-label="View shopping cart">
+    🛒 <b id="count">0</b>
   </button>
- <span>🛒 <b id="count">0</b></span>
 </header>
 
-<nav>
- <a href="#">Home</a>
- <a href="#gift-items">Gift Items</a>
- <a href="#bouquets">Bouquets</a>
- <a href="#home-decor">Home Decor</a>
- <a href="#products">Products</a>
- <a href="#contact">Contact</a>
+<nav aria-label="Main navigation">
+  <a href="#">Home</a>
+  <a href="#gift-items">Gift Items</a>
+  <a href="#bouquets">Bouquets</a>
+  <a href="#home-decor">Home Decor</a>
+  <a href="#products">Products</a>
+  <a href="#contact">Contact</a>
 </nav>
 
-<section class="zeronia-hero">
+<section class="zeronia-hero" aria-label="Zeronia store cover">
   <img
-    src="zeronia-cover1.PNG"
-    alt="ZERONIA Gift & Accessories"
+    src="images/zeronia-cover.png"
+    alt="ZERONIA Gift & Accessories — Special Gifts, Beautiful Moments"
     class="zeronia-cover-image"
   >
-  <a href="#products" class="zeronia-shop-button">
-    SHOP NOW →
-  </a>
+  <a href="#products" class="zeronia-shop-button">SHOP NOW →</a>
 </section>
 
-<section class="section">
- <h2 class="heading">SHOP BY CATEGORY</h2>
- <div class="categories">
-  <a class="category" id="gift-items" href="#products" style="text-decoration:none">
-   <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=700&q=80" alt="Gift items">
-   <div>🎁 Gift Items</div>
-  </a>
-  <a class="category" id="bouquets" href="#products" style="text-decoration:none">
-   <img src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=700&q=80" alt="Bouquets">
-   <div>💐 Bouquets</div>
-  </a>
-  <a class="category" id="home-decor" href="#products" style="text-decoration:none">
-   <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Home decor">
-   <div>🏡 Home Decor</div>
-  </a>
- </div>
+<section class="section" id="categories">
+  <h2 class="heading">SHOP BY CATEGORY</h2>
+  <div class="categories">
+    <a class="category" id="gift-items" href="#products">
+      <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=700&q=80" alt="Gift items">
+      <div>🎁 Gift Items</div>
+    </a>
+    <a class="category" id="bouquets" href="#products">
+      <img src="https://images.unsplash.com/photo-1520763185298-1b434c919102?auto=format&fit=crop&w=700&q=80" alt="Bouquets">
+      <div>💐 Bouquets</div>
+    </a>
+    <a class="category" id="home-decor" href="#products">
+      <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Home decor">
+      <div>🏡 Home Decor</div>
+    </a>
+  </div>
 </section>
-
-
 
 <section class="section" id="products">
- <h2 class="heading">FEATURED PRODUCTS</h2>
- <div class="products" id="product-list">
-  <article class="product">
-   <img src="https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=500&q=80" alt="Gift">
-   <h3>Beautiful Gift</h3><p class="price">Rs. 2,500</p>
-   <button class="cart" onclick="addCart('Beautiful Gift',2500)">🛒 Add to Cart</button>
-  </article>
-  <article class="product">
-   <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80" alt="Bouquet">
-   <h3>Rose Bouquet</h3><p class="price">Rs. 3,500</p>
-   <button class="cart" onclick="addCart('Rose Bouquet',3500)">🛒 Add to Cart</button>
-  </article>
-  <article class="product">
-   <img src="https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=500&q=80" alt="Home decor">
-   <h3>Home Decor</h3><p class="price">Rs. 1,800</p>
-   <button class="cart" onclick="addCart('Home Decor',1800)">🛒 Add to Cart</button>
-  </article>
-  <article class="product">
-   <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=500&q=80" alt="Gift box">
-   <h3>Premium Gift Box</h3><p class="price">Rs. 4,950</p>
-   <button class="cart" onclick="addCart('Premium Gift Box',4950)">🛒 Add to Cart</button>
-  </article>
+  <h2 class="heading">FEATURED PRODUCTS</h2>
 
- </div>
- 
-<div id="cart-items" style="max-width:500px;margin:20px auto;padding:15px;">
-  <h3>Your Shopping Cart</h3>
-  <p id="empty-cart">Your cart is empty.</p>
-  <div id="cart-list"></div>
-</div>
+  <div class="products" id="product-list">
+    <article class="product" data-default-product="true">
+      <img src="https://images.unsplash.com/photo-1559454403-b8fb88521f11?auto=format&fit=crop&w=500&q=80" alt="Beautiful gift">
+      <h3>Beautiful Gift</h3>
+      <p class="description">A thoughtful gift for a special occasion.</p>
+      <p class="price">Rs. 2,500</p>
+      <button class="cart" onclick="addCart('Beautiful Gift',2500)">🛒 Add to Cart</button>
+    </article>
+    <article class="product" data-default-product="true">
+      <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80" alt="Rose bouquet">
+      <h3>Rose Bouquet</h3>
+      <p class="description">A beautiful bouquet for someone special.</p>
+      <p class="price">Rs. 3,500</p>
+      <button class="cart" onclick="addCart('Rose Bouquet',3500)">🛒 Add to Cart</button>
+    </article>
+    <article class="product" data-default-product="true">
+      <img src="https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=500&q=80" alt="Home decor">
+      <h3>Home Decor</h3>
+      <p class="description">Decorative item for your home.</p>
+      <p class="price">Rs. 1,800</p>
+      <button class="cart" onclick="addCart('Home Decor',1800)">🛒 Add to Cart</button>
+    </article>
+    <article class="product" data-default-product="true">
+      <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=500&q=80" alt="Premium gift box">
+      <h3>Premium Gift Box</h3>
+      <p class="description">A premium gift box for celebrations.</p>
+      <p class="price">Rs. 4,950</p>
+      <button class="cart" onclick="addCart('Premium Gift Box',4950)">🛒 Add to Cart</button>
+    </article>
+  </div>
 
-<p id="total" style="text-align:center;font-weight:bold">
-  Cart Total: Rs. 0
-</p>
+  <div class="cart-box" id="cart-items">
+    <h3>Your Shopping Cart</h3>
+    <p id="empty-cart">Your cart is empty.</p>
+    <div id="cart-list"></div>
+    <p id="total">Cart Total: Rs. 0</p>
+  </div>
 
-<div class="order-form" id="order-form" style="max-width:500px;margin:20px auto;padding:20px;border:1px solid #ddd;border-radius:12px;">
-  <h2>Complete Your Order</h2>
+  <div class="order-form" id="order-form">
+    <h2>Complete Your Order</h2>
 
-  <label for="customer-name">Your Name</label>
-  <input id="customer-name" type="text" placeholder="Enter your full name" required style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+    <label for="customer-name">Your Name</label>
+    <input id="customer-name" type="text" placeholder="Enter your full name" autocomplete="name" required>
 
-  <label for="customer-phone">Phone Number</label>
-  <input id="customer-phone" type="tel" placeholder="07XXXXXXXX" required style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+    <label for="customer-phone">Phone Number</label>
+    <input id="customer-phone" type="tel" placeholder="07XXXXXXXX" autocomplete="tel" required>
 
-  <label for="customer-address">Delivery Address</label>
-  <textarea id="customer-address" placeholder="Enter your full delivery address" required rows="3" style="display:block;width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"></textarea>
+    <label for="customer-address">Delivery Address</label>
+    <textarea id="customer-address" placeholder="Enter your full delivery address" rows="3" autocomplete="street-address" required></textarea>
 
-  <button type="button" class="cart" onclick="sendWhatsAppOrder()" style="width:100%;padding:14px;">
-    Send Order via WhatsApp
-  </button>
-
-  <button type="button" class="cart" onclick="askWhatsApp()" style="width:100%;padding:14px;margin-top:10px;">
-    Ask About Products on WhatsApp
-  </button>
-</div>
+    <button type="button" class="cart" onclick="sendWhatsAppOrder()">
+      Send Order via WhatsApp
+    </button>
+    <button type="button" class="cart" onclick="askWhatsApp()" style="margin-top:10px">
+      Ask About Products on WhatsApp
+    </button>
+  </div>
 </section>
 
 <section class="services">
- <div>🎁<br><b>Wide Selection</b><br>Gifts • Bouquets • Decor</div>
- <div>🛡️<br><b>Secure Service</b><br>Customer Care</div>
- <div>🚚<br><b>Islandwide Delivery</b><br>Fast & Convenient</div>
+  <div>🎁<br><b>Wide Selection</b><br>Gifts • Bouquets • Decor</div>
+  <div>🛡️<br><b>Customer Care</b><br>Friendly service</div>
+  <div>🚚<br><b>Islandwide Delivery</b><br>Fast & convenient</div>
 </section>
 
 <footer id="contact">
- <h2><strong>ZERONIA</strong></h2>
- <p>Gift & Accessories</p>
- <p>Special Gifts • Beautiful Moments</p>
- <p>Nawalapitiya | 070 344 4266</p>
- <p>© 2026 Zeronia Gift & Accessories</p>
+  <h2><strong>ZERONIA</strong></h2>
+  <p>Gift & Accessories</p>
+  <p>Special Gifts • Beautiful Moments</p>
+  <p>Nawalapitiya | 070 344 4266</p>
+  <p>© 2026 Zeronia Gift & Accessories</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = "https://fjyqntkkiyxghvlmdhnm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5J6jGrNT5RZ1RQEBw883Fw_ehEFqP7H";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let cart = [];
 
 function addCart(name, price) {
   const existingItem = cart.find(item => item.name === name);
-
   if (existingItem) {
     existingItem.quantity += 1;
   } else {
-    cart.push({ name, price, quantity: 1 });
+    cart.push({ name, price: Number(price), quantity: 1 });
   }
+  updateCartDisplay();
+}
 
+function removeCartItem(name) {
+  cart = cart.filter(item => item.name !== name);
   updateCartDisplay();
 }
 
 function updateCartDisplay() {
- 
   const cartList = document.getElementById("cart-list");
   const emptyCart = document.getElementById("empty-cart");
   const count = document.getElementById("count");
@@ -338,75 +448,59 @@ function updateCartDisplay() {
 
   let total = 0;
   let itemCount = 0;
+  cartList.replaceChildren();
 
-  cartList.innerHTML = "";
+  cart.forEach(item => {
+    const quantity = item.quantity || 1;
+    const subtotal = Number(item.price) * quantity;
+    total += subtotal;
+    itemCount += quantity;
 
-  cart.forEach((item, index) => {
-  const quantity = item.quantity || 1;
-  const subtotal = Number(item.price) * quantity;
+    const row = document.createElement("div");
+    row.className = "cart-row";
 
-  total += subtotal;
-  itemCount += quantity;
+    const details = document.createElement("span");
+    details.textContent = item.name + " × " + quantity +
+      " — Rs. " + subtotal.toLocaleString("en-US");
 
-  const row = document.createElement("div");
-  row.style.cssText =
-    "display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #ddd;";
+    const removeButton = document.createElement("button");
+    removeButton.className = "remove-item";
+    removeButton.type = "button";
+    removeButton.textContent = "Remove";
+    removeButton.addEventListener("click", () => removeCartItem(item.name));
 
-  const details = document.createElement("span");
-  details.textContent =
-    item.name + " × " + quantity +
-    " — Rs. " + subtotal.toLocaleString("en-US");
-
-  const removeBtn = document.createElement("button");
-  removeBtn.textContent = "Remove";
-  removeBtn.style.cssText =
-    "background:#E53935;color:#FFFFFF;border:none;border-radius:6px;padding:8px 10px;cursor:pointer;font-weight:bold;";
-
-  removeBtn.addEventListener("click", function () {
-    cart.splice(index, 1);
-    updateCartDisplay();
+    row.append(details, removeButton);
+    cartList.appendChild(row);
   });
-
-  row.appendChild(details);
-  row.appendChild(removeBtn);
-  cartList.appendChild(row);
-});
 
   emptyCart.style.display = cart.length === 0 ? "block" : "none";
   count.textContent = itemCount;
-
-const floatingCount = document.getElementById("floating-cart-count");
-if (floatingCount) floatingCount.textContent = itemCount;
-
-  totalElement.textContent =
-    "Cart Total: Rs. " + total.toLocaleString("en-US");
+  totalElement.textContent = "Cart Total: Rs. " + total.toLocaleString("en-US");
 }
 
-
-document.getElementById('search').addEventListener('input', function() {
- const query = this.value.toLowerCase();
- document.querySelectorAll('.product').forEach(card => {
-  card.style.display = card.textContent.toLowerCase().includes(query) ? '' : 'none';
- });
+document.getElementById("search").addEventListener("input", function () {
+  const query = this.value.toLowerCase().trim();
+  document.querySelectorAll("#product-list .product").forEach(card => {
+    card.style.display = card.textContent.toLowerCase().includes(query) ? "" : "none";
+  });
 });
 
-function loadZeroniaProducts() {
+async function loadZeroniaProducts() {
   const productList = document.getElementById("product-list");
   if (!productList) return;
 
-  let savedProducts = [];
+  const { data: savedProducts, error } = await db
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  try {
-    savedProducts = JSON.parse(
-      localStorage.getItem("zeronia_products_v1") || "[]"
-    );
-    if (!Array.isArray(savedProducts)) savedProducts = [];
-  } catch (error) {
+  if (error) {
     console.error("Product loading error:", error);
     return;
   }
 
-  if (savedProducts.length === 0) return;
+  // Keep the sample products visible if the database has no products yet.
+  if (!savedProducts || savedProducts.length === 0) return;
 
   productList.replaceChildren();
 
@@ -415,8 +509,13 @@ function loadZeroniaProducts() {
     card.className = "product";
 
     const image = document.createElement("img");
-    image.src = product.photo || product.image || "";
+    image.src = product.image_url || "";
     image.alt = product.name || "Zeronia product";
+    image.loading = "lazy";
+    image.onerror = () => {
+      image.alt = "Product image unavailable";
+      image.style.background = "#f4f4f4";
+    };
 
     const name = document.createElement("h3");
     name.textContent = product.name || "Unnamed Product";
@@ -427,19 +526,16 @@ function loadZeroniaProducts() {
 
     const price = document.createElement("p");
     price.className = "price";
-    price.textContent = "Rs. " +
-      Number(product.price || 0).toLocaleString("en-US");
+    price.textContent = "Rs. " + Number(product.price || 0).toLocaleString("en-US");
 
     const status = document.createElement("p");
     status.textContent = product.status || "Available";
 
     const button = document.createElement("button");
     button.className = "cart";
-    button.textContent = product.status === "Out of Stock"
-      ? "Out of Stock"
-      : "🛒 Add to Cart";
+    button.type = "button";
+    button.textContent = product.status === "Out of Stock" ? "Out of Stock" : "🛒 Add to Cart";
     button.disabled = product.status === "Out of Stock";
-
     button.addEventListener("click", () => {
       addCart(product.name || "Zeronia Product", Number(product.price || 0));
     });
@@ -448,9 +544,6 @@ function loadZeroniaProducts() {
     productList.appendChild(card);
   });
 }
-
-loadZeroniaProducts();
-
 
 function sendWhatsAppOrder() {
   const name = document.getElementById("customer-name").value.trim();
@@ -461,16 +554,12 @@ function sendWhatsAppOrder() {
     alert("Please enter your name, phone number, and delivery address.");
     return;
   }
-
   if (cart.length === 0) {
     alert("Please add at least one product to your cart first.");
     return;
   }
 
-  const total = cart.reduce(
-    (sum, item) => sum + Number(item.price) * (item.quantity || 1),
-    0
-  );
+  const total = cart.reduce((sum, item) => sum + Number(item.price) * (item.quantity || 1), 0);
 
   let message = "ZERONIA - NEW ORDER\n\n";
   message += "Customer Name: " + name + "\n";
@@ -481,114 +570,25 @@ function sendWhatsAppOrder() {
   cart.forEach((item, index) => {
     const quantity = item.quantity || 1;
     const subtotal = Number(item.price) * quantity;
-
-    message += (index + 1) + ". " + item.name +
-      " x " + quantity +
+    message += (index + 1) + ". " + item.name + " x " + quantity +
       " = Rs. " + subtotal.toLocaleString("en-US") + "\n";
   });
 
   message += "\nTotal: Rs. " + total.toLocaleString("en-US");
   message += "\n\nPlease confirm my order.";
 
-  const whatsappURL =
-    "https://wa.me/94703444266?text=" + encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
+  const whatsappURL = "https://wa.me/94703444266?text=" + encodeURIComponent(message);
+  window.open(whatsappURL, "_blank", "noopener");
 }
-
 
 function askWhatsApp() {
-  const message =
-    "Hello ZERONIA! I would like to ask for more information about your products.";
-
-  const whatsappURL =
-    "https://wa.me/94703444266?text=" + encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
+  const message = "Hello ZERONIA! I would like to ask for more information about your products.";
+  const whatsappURL = "https://wa.me/94703444266?text=" + encodeURIComponent(message);
+  window.open(whatsappURL, "_blank", "noopener");
 }
 
+loadZeroniaProducts();
+updateCartDisplay();
 </script>
-
-<!-- Floating WhatsApp Button -->
-<a href="https://wa.me/94703444266" 
-   class="whatsapp-float" 
-   target="_blank" 
-   rel="noopener"
-   aria-label="Chat with Zeronia on WhatsApp">
-  <svg viewBox="0 0 32 32" width="34" height="34" fill="white" aria-hidden="true">
-    <path d="M16 .5A15.5 15.5 0 0 0 2.7 24L.5 31.5 8.2 29.4A15.5 15.5 0 1 0 16 .5zm0 28.3a12.7 12.7 0 0 1-6.5-1.8l-.5-.3-4.5 1.2 1.2-4.4-.3-.5A12.7 12.7 0 1 1 16 28.8zm7-9.5c-.4-.2-2.1-1-2.4-1.1-.3-.1-.6-.2-.8.2-.3.4-.9 1.1-1.1 1.3-.2.3-.4.3-.8.1-.4-.2-1.5-.6-2.8-1.8-1-.9-1.7-2-1.9-2.3-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.6.1-.3 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.3 0-.7.1-1 .5-.4.4-1.3 1.3-1.3 3s1.3 3.4 1.5 3.6c.2.2 2.6 4 6.3 5.5.9.4 1.6.6 2.1.7.9.3 1.7.2 2.3.1.7-.1 2.1-.9 2.4-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.5z"/>
-  </svg>
-</a>
-
-<!-- Floating Shopping Cart Button -->
-<button type="button"
-        class="cart-float"
-        onclick="document.getElementById('cart-items').scrollIntoView({behavior:'smooth',block:'start'})"
-        aria-label="Go to shopping cart">
-  <svg viewBox="0 0 24 24" width="29" height="29"
-       fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="9" cy="21" r="1"/>
-    <circle cx="20" cy="21" r="1"/>
-    <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>
-  </svg>
-  <span class="cart-float-count" id="floating-cart-count">0</span>
-</button>
-
-<style>
-.cart-float {
-  position: fixed;
-  right: 20px;
-  bottom: 92px;
-  width: 60px;
-  height: 60px;
-  border: none;
-  border-radius: 50%;
-  background: #061A35;
-  color: #E5BD55;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  z-index: 9998;
-  cursor: pointer;
-}
-.cart-float-count {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 23px;
-  height: 23px;
-  padding: 0 5px;
-  border-radius: 50px;
-  background: #E53935;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>
-<style>
-.whatsapp-float {
-  position: fixed;
-  width: 60px;
-  height: 60px;
-  right: 20px;
-  bottom: 20px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  z-index: 9999;
-  text-decoration: none;
-}
-.whatsapp-float:hover {
-  background: #1ebe5d;
-}
-</style>
 </body>
 </html>
