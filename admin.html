@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Zeronia Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f5f8;color:#10264a}
@@ -26,6 +27,7 @@ button{border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:b
 .out{color:#bd3030}
 .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 #message{font-weight:bold}
+.hidden{display:none}
 </style>
 </head>
 <body>
@@ -35,7 +37,19 @@ button{border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:b
 </header>
 
 <main>
+<section class="panel" id="loginPanel">
+<h2>Admin Login</h2>
+<label>Email</label>
+<input id="email" type="email" placeholder="Admin email" required>
+<label>Password</label>
+<input id="password" type="password" placeholder="Password" required>
+<button class="save" id="loginButton">Login</button>
+<p id="loginMessage"></p>
+</section>
+
+<div id="adminArea" class="hidden">
 <section class="panel">
+<button id="logoutButton" class="delete">Logout</button>
 <h2 id="formTitle">Add New Product</h2>
 <form id="productForm">
 <input type="hidden" id="productId">
@@ -58,7 +72,7 @@ button{border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:b
 
 <label>Product Photo</label>
 <input id="photo" type="file" accept="image/*">
-<small>Select a photo from your computer. For this first test, keep images small.</small>
+<small>Select a photo from your computer. Maximum 5 MB.</small>
 
 <label>Stock Status</label>
 <select id="status">
@@ -79,115 +93,214 @@ button{border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:b
 <p id="count">Products: 0</p>
 <div class="products" id="products"></div>
 </section>
+</div>
 </main>
 
 <script>
-const KEY = "zeronia_products_v1";
+const SUPABASE_URL = "https://fjyqntkkiyxghvlmdhnm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5J6jGrNT5RZ1RQEBw883Fw_ehEFqP7H";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let items = [];
-let selectedPhoto = "";
+let selectedFile = null;
+let oldImage = "";
 const $ = id => document.getElementById(id);
 
-try {
-  items = JSON.parse(localStorage.getItem(KEY) || "[]");
-  if (!Array.isArray(items)) items = [];
-} catch {
-  items = [];
+function showMessage(message, isError=false) {
+  $("message").textContent = message;
+  $("message").style.color = isError ? "#bd3030" : "#168447";
 }
 
-$("photo").addEventListener("change", function() {
-  const file = this.files[0];
-  if (!file) return;
-  if (!file.type.startsWith("image/")) {
-    alert("Please select an image.");
-    this.value = "";
+async function checkSession() {
+  const {data, error} = await db.auth.getSession();
+  if (error) {
+    $("loginMessage").textContent = error.message;
     return;
   }
-  if (file.size > 1500000) {
-    alert("Please choose an image under 1.5 MB.");
-    this.value = "";
+  if (data.session) {
+    $("loginPanel").classList.add("hidden");
+    $("adminArea").classList.remove("hidden");
+    await loadItems();
+  } else {
+    $("loginPanel").classList.remove("hidden");
+    $("adminArea").classList.add("hidden");
+  }
+}
+
+$("loginButton").addEventListener("click", async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  if (!email || !password) {
+    $("loginMessage").textContent = "Enter email and password.";
     return;
   }
-  const reader = new FileReader();
-  reader.onload = () => { selectedPhoto = reader.result; };
-  reader.readAsDataURL(file);
+
+  $("loginButton").disabled = true;
+  $("loginMessage").textContent = "Logging in...";
+
+  const {error} = await db.auth.signInWithPassword({email, password});
+
+  $("loginButton").disabled = false;
+
+  if (error) {
+    $("loginMessage").textContent = error.message;
+    return;
+  }
+  $("loginMessage").textContent = "";
+  await checkSession();
 });
 
-function saveItems() {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(items));
-    render();
-    return true;
-  } catch (e) {
-    alert("Storage is full. Please use smaller photos.");
-    return false;
+$("logoutButton").addEventListener("click", async () => {
+  await db.auth.signOut();
+  items = [];
+  render();
+  await checkSession();
+});
+
+$("photo").addEventListener("change", function() {
+  selectedFile = this.files[0] || null;
+  if (!selectedFile) return;
+
+  if (!selectedFile.type.startsWith("image/")) {
+    alert("Please select an image.");
+    this.value = "";
+    selectedFile = null;
+    return;
   }
+
+  if (selectedFile.size > 5000000) {
+    alert("Please choose an image under 5 MB.");
+    this.value = "";
+    selectedFile = null;
+  }
+});
+
+async function uploadPhoto(file) {
+  const extension = file.name.split(".").pop().toLowerCase();
+  const path = `${Date.now()}-${crypto.randomUUID()}.${extension}`;
+
+  const {error} = await db.storage
+    .from("product-images")
+    .upload(path, file, {upsert:false});
+
+  if (error) throw error;
+
+  const {data} = db.storage
+    .from("product-images")
+    .getPublicUrl(path);
+
+  return data.publicUrl;
+}
+
+async function loadItems() {
+  $("products").textContent = "Loading products...";
+
+  const {data, error} = await db
+    .from("products")
+    .select("*")
+    .order("created_at", {ascending:false});
+
+  if (error) {
+    $("products").textContent = "Could not load products: " + error.message;
+    return;
+  }
+
+  items = data || [];
+  render();
 }
 
 function resetForm() {
   $("productForm").reset();
   $("productId").value = "";
-  selectedPhoto = "";
+  selectedFile = null;
+  oldImage = "";
   $("formTitle").textContent = "Add New Product";
   $("saveButton").textContent = "Save Product";
   $("cancelButton").hidden = true;
-  $("message").textContent = "";
+  showMessage("");
 }
 
-$("productForm").addEventListener("submit", function(e) {
+$("productForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
   const id = $("productId").value;
-  const old = items.find(p => p.id === id);
+  const old = items.find(p => String(p.id) === id);
 
   const product = {
-    id: id || String(Date.now()),
     name: $("name").value.trim(),
     description: $("description").value.trim(),
     category: $("category").value,
     price: Number($("price").value),
     status: $("status").value,
-    photo: selectedPhoto || (old ? (old.photo || old.image || "") : ""),
-image: selectedPhoto || (old ? (old.image || old.photo || "") : "")
+    image_url: oldImage || (old ? old.image_url || "" : "")
   };
 
-  if (!product.name || product.price < 0) {
+  if (!product.name || !Number.isFinite(product.price) || product.price < 0) {
     alert("Please check the product name and price.");
     return;
   }
 
-  if (id) {
-    items = items.map(p => p.id === id ? product : p);
-  } else {
-    items.push(product);
-  }
+  $("saveButton").disabled = true;
+  showMessage("Saving product...");
 
-  if (saveItems()) {
+  try {
+    if (selectedFile) {
+      product.image_url = await uploadPhoto(selectedFile);
+    }
+
+    let result;
+
+    if (id) {
+      result = await db.from("products").update(product).eq("id", id);
+    } else {
+      result = await db.from("products").insert(product);
+    }
+
+    if (result.error) throw result.error;
+
     resetForm();
-    $("message").textContent = "Product saved successfully.";
+    showMessage("Product saved successfully.");
+    await loadItems();
+
+  } catch (error) {
+    showMessage("Error: " + error.message, true);
+  } finally {
+    $("saveButton").disabled = false;
   }
 });
 
 function editProduct(id) {
-  const p = items.find(item => item.id === id);
+  const p = items.find(item => String(item.id) === String(id));
   if (!p) return;
+
   $("productId").value = p.id;
   $("name").value = p.name;
   $("description").value = p.description || "";
   $("category").value = p.category;
   $("price").value = p.price;
   $("status").value = p.status;
-  selectedPhoto = p.photo || p.image || "";
+  $("photo").value = "";
+  selectedFile = null;
+  oldImage = p.image_url || "";
+
   $("formTitle").textContent = "Edit Product";
   $("saveButton").textContent = "Update Product";
   $("cancelButton").hidden = false;
-  window.scrollTo({top: 0, behavior: "smooth"});
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
-function deleteProduct(id) {
-  const p = items.find(item => item.id === id);
+async function deleteProduct(id) {
+  const p = items.find(item => String(item.id) === String(id));
   if (!p || !confirm("Delete " + p.name + "?")) return;
-  items = items.filter(item => item.id !== id);
-  saveItems();
+
+  const {error} = await db.from("products").delete().eq("id", id);
+
+  if (error) {
+    alert("Delete failed: " + error.message);
+    return;
+  }
+
+  await loadItems();
 }
 
 $("cancelButton").addEventListener("click", resetForm);
@@ -200,9 +313,10 @@ function render() {
     const card = document.createElement("article");
     card.className = "card";
 
-    if (p.photo) {
+    const photo = p.image_url || p.photo || "";
+    if (photo) {
       const img = document.createElement("img");
-      img.src = p.photo;
+      img.src = photo;
       img.alt = p.name;
       card.appendChild(img);
     }
@@ -216,7 +330,7 @@ function render() {
     card.appendChild(category);
 
     const price = document.createElement("p");
-    price.textContent = "Rs. " + p.price.toLocaleString("en-US");
+    price.textContent = "Rs. " + Number(p.price).toLocaleString("en-US");
     card.appendChild(price);
 
     const status = document.createElement("p");
@@ -243,7 +357,11 @@ function render() {
   });
 }
 
-render();
+db.auth.onAuthStateChange(() => {
+  setTimeout(checkSession, 0);
+});
+
+checkSession();
 </script>
 </body>
 </html>
